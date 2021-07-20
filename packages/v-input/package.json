@@ -1,0 +1,52 @@
+{
+  "name": "v-input",
+  "version": "1.0.0",
+  "description": "A Vue directive to control HTML input/textarea element value. Support Vue 2 and Vue 3.",
+  "keywords": [
+    "vue2",
+    "vue3",
+    "v-input"
+  ],
+  "author": "satrong <satrong@163.com>",
+  "homepage": "",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "test": "jest"
+  },
+  "main": "./lib/v-input.umd.js",
+  "module": "./lib/v-input.es.js",
+  "exports": {
+    ".": {
+      "import": "./lib/v-input.es.js",
+      "require": "./lib/v-input.umd.js"
+    }
+  },
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib",
+    "package.json",
+    "README.md"
+  ],
+  "publishConfig": {
+    "registry": "http://registry.npm.taobao.org"
+  },
+  "devDependencies": {
+    "@babel/preset-env": "^7.14.7",
+    "@babel/preset-typescript": "^7.14.5",
+    "@types/jest": "^26.0.24",
+    "@types/node": "^16.3.3",
+    "@vue/test-utils": "^2.0.0-rc.10",
+    "jest": "^27.0.6",
+    "jsdom": "^16.6.0",
+    "typescript": "^4.3.5",
+    "vite": "^2.4.2",
+    "vite-plugin-html": "^2.0.7",
+    "vue": "^3.1.5",
+    "vue2": "npm:vue@^2.6.14"
+  },
+  "license": "ISC"
+}

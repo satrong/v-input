@@ -1,0 +1,33 @@
+{
+  "name": "demo",
+  "version": "1.0.0",
+  "description": "> TODO: description",
+  "author": "caohuichang <satrong@foxmail.com>",
+  "homepage": "",
+  "license": "ISC",
+  "directories": {
+    "lib": "lib"
+  },
+  "files": [
+    "lib"
+  ],
+  "publishConfig": {
+    "registry": "http://registry.npm.taobao.org"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build"
+  },
+  "devDependencies": {
+    "@babel/preset-env": "^7.14.7",
+    "@babel/preset-typescript": "^7.14.5",
+    "typescript": "^4.3.5",
+    "vite": "^2.4.2",
+    "vite-plugin-html": "^2.0.7",
+    "vue": "^3.1.5",
+    "vue2": "npm:vue@^2.6.14"
+  },
+  "dependencies": {
+    "v-input": "^1.0.0"
+  }
+}
