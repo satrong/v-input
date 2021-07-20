@@ -1,6 +1,6 @@
 {
   "name": "v-input",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A Vue directive to control HTML input/textarea element value. Support Vue 2 and Vue 3.",
   "keywords": [
     "vue2",
