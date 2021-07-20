@@ -5,7 +5,8 @@
     "dev": "lerna run dev --scope demo --stream",
     "build": "lerna run build --stream",
     "test": "lerna run test --scope v-input --stream",
-    "bootstrap": "lerna bootstrap"
+    "bootstrap": "lerna bootstrap",
+    "lerna:publish": "lerna publish"
   },
   "devDependencies": {
     "@types/jest": "^26.0.24",

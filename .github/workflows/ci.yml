@@ -41,3 +41,17 @@ jobs:
       - run: pnpm install
       - run: pnpm bootstrap
       - run: pnpm test
+
+  publish-npm:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 14
+          registry-url: https://registry.npmjs.org/
+
+      - run: pnpm lerna:publish --yes --legacy-auth ${{ secrets.NPM_TOKEN }} --message "chore(release):publish %v" --create-release github ${{ github.event.inputs.parameter_for_publish }} ${{ github.event.inputs.version }}
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
