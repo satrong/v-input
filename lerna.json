@@ -1,5 +1,5 @@
 {
   "npmClient": "pnpm",
-  "packages": ["packages/*"],
+  "packages": ["packages/v-input"],
   "version": "1.0.0"
 }
