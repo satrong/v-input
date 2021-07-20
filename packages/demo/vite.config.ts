@@ -8,6 +8,9 @@ export default defineConfig({
       vue: Path.resolve('./node_modules/vue/dist/vue.esm-bundler.js')
     }
   },
+  build: {
+    emptyOutDir: true
+  },
   server: {
     port: 3300
   }
