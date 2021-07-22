@@ -1,6 +1,7 @@
 {
+  "private": true,
   "name": "demo",
-  "version": "1.0.0",
+  "version": "0.0.2",
   "description": "> TODO: description",
   "author": "caohuichang <satrong@foxmail.com>",
   "homepage": "",
@@ -28,6 +29,6 @@
     "vue2": "npm:vue@^2.6.14"
   },
   "dependencies": {
-    "v-input": "^1.0.0"
+    "@satrong/v-input": "^0.0.2"
   }
 }

@@ -1,1 +1,1 @@
-declare module 'v-input';
+declare module '@satrong/v-input';

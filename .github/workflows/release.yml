@@ -1,0 +1,71 @@
+
+name: RELEASE
+
+on:
+  workflow_dispatch:
+    inputs:
+      bump:
+        required: true
+        description: "选择版本类型：major, minor, patch, premajor, preminor, prepatch, prerelease"
+        default: "patch"
+
+jobs:
+  BUILD:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 14
+
+      - name: Configure CI Git User
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git remote set-url origin https://$GITHUB_ACTOR:$GITHUB_PAT@github.com/satrong/v-input
+        env:
+          GITHUB_PAT: ${{ secrets.CI_GIT_REPO }}
+
+      - name: Authenticate with NPM Registry
+        run: |
+          echo "registry=http://registry.npmjs.org/" >> .npmrc
+          echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> .npmrc
+          npm whoami
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - uses: actions/cache@v2
+        with:
+          path: |
+            node_modules
+            **/node_modules
+          key: ${{ runner.os }}-${{ hashFiles('./pnpm-lock.yaml') }}
+
+      - name: Cache pnpm modules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-pnpm-modules
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ matrix.node-version }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-${{ matrix.node-version }}-
+
+      - uses: pnpm/action-setup@v2.0.1
+        with:
+          version: 6.10.3
+      
+      - run: pnpm install
+      - run: pnpm bootstrap
+      - run: pnpm test
+      - run: pnpm build
+
+      - name: Check changes
+        run: echo "GIT_CHANGES=$(echo `git diff --name-only`)" >> $GITHUB_ENV
+
+      - name: Git commit
+        if: env.GIT_CHANGES != ''
+        run: git add . && git commit -am "build" && git push
+
+      - name: Publish NPM
+        run: lerna publish ${{ github.event.inputs.bump }} --yes --message "chore(release):publish %v"

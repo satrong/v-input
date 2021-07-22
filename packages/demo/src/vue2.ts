@@ -1,5 +1,5 @@
 import Vue from 'vue2'
-import input from 'v-input'
+import input from '@satrong/v-input'
 
 Vue.use(input)
 
@@ -18,7 +18,7 @@ Vue.component('MyInput', {
 new Vue({
   template: `
 <div>
-  <h4>Vue ${Vue.version}</h4>
+  <h4>Vue v${Vue.version}</h4>
   <MyInput />
 </div>`,
 }).$mount('#vue2')

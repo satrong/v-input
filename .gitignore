@@ -120,3 +120,4 @@ out
 .vscode
 package-lock.json
 .pnpm-debug.log
+.npmrc

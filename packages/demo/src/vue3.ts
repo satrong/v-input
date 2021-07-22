@@ -1,10 +1,10 @@
 import { createApp, version } from 'vue'
-import input from 'v-input'
+import input from '@satrong/v-input'
 
 const app = createApp({
   template: `
 <div>
-  <h4>Vue ${version}</h4>
+  <h4>Vue v${version}</h4>
   <MyInput />
 </div>
   `,

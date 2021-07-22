@@ -4,7 +4,7 @@
   "scripts": {
     "dev": "lerna run dev --scope demo --stream",
     "build": "lerna run build --stream",
-    "test": "lerna run test --scope v-input --stream",
+    "test": "lerna run test --scope @satrong/v-input --stream",
     "bootstrap": "lerna bootstrap",
     "lerna:publish": "lerna publish"
   },
