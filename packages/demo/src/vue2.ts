@@ -20,5 +20,5 @@ new Vue({
 <div>
   <h4>Vue v${Vue.version}</h4>
   <MyInput />
-</div>`,
+</div>`
 }).$mount('#vue2')

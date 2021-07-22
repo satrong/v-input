@@ -7,7 +7,7 @@ const app = createApp({
   <h4>Vue v${version}</h4>
   <MyInput />
 </div>
-  `,
+  `
 })
 
 app.component('MyInput', {
