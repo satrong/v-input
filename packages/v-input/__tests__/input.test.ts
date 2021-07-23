@@ -1,5 +1,6 @@
 import { mount } from '@vue/test-utils'
 import { directive } from '../src/index'
+import { validate } from '../src/filter'
 import type { BindValue, Modifier } from '../src/filter'
 
 type TModifier = keyof Modifier | ''
@@ -28,22 +29,25 @@ function inputComponent(arg: string, modifier: string, bindValue?: BindValue) {
   }
 }
 
+type TestUnitsItem = {
+  input: string;
+  expect: string;
+  checkBindValue?: boolean;
+  modifier?: TModifier[];
+  bindValue?: BindValue;
+  blur?: boolean;
+}
+
 type TestUnits = {
   title: string;
   arg: string;
   modifier?: TModifier[];
   bindValue?: BindValue;
   blur?: boolean;
-  items: {
-    input: string;
-    expect: string;
-    modifier?: TModifier[];
-    bindValue?: BindValue;
-    blur?: boolean;
-  }[]
-}[]
+  items: TestUnitsItem[];
+}
 
-const testUnits: TestUnits = [
+const testUnits: TestUnits[] = [
   {
     title: 'Any string',
     arg: 'a',
@@ -179,26 +183,42 @@ const testUnits: TestUnits = [
       { input: 'a1b2c3', expect: 'abc', bindValue: val => val.replace(/[^a-z]/gi, '') },
       { input: 'a1b2c3000', expect: '123', modifier: ['number'], bindValue: val => val.replace(/0+/g, '') }
     ]
+  },
+  {
+    title: 'Check bindValue',
+    arg: 'a',
+    items: [
+      { input: '123', expect: '', checkBindValue: true, bindValue: val => val + 1 },
+      { input: '123', expect: '', checkBindValue: true, bindValue: [10, 2] }
+    ]
   }
 ]
 
+async function testCb(item: TestUnits, el: TestUnitsItem) {
+  const modifiers = (el.modifier ? el.modifier : item.modifier) || []
+  const modifier = modifiers.length > 0 ? [''].concat(modifiers) : []
+  const wrapper = mount(inputComponent(item.arg, modifier.join('.'), el.bindValue || item.bindValue))
+  const ele = wrapper.find('input')
+
+  for (const str of el.input.split('')) {
+    await ele.setValue(ele.element.value + str)
+  }
+
+  if (el.blur || (el.blur === undefined && item.blur)) {
+    await ele.trigger('blur')
+  }
+
+  expect(ele.element.value).toBe(el.expect)
+}
+
 testUnits.forEach(item => {
   item.items.forEach(el => {
-    test(item.title + ' ' + el.input + ' -> ' + el.expect, async() => {
-      const modifiers = (el.modifier ? el.modifier : item.modifier) || []
-      const modifier = modifiers.length > 0 ? [''].concat(modifiers) : []
-      const wrapper = mount(inputComponent(item.arg, modifier.join('.'), el.bindValue || item.bindValue))
-      const ele = wrapper.find('input')
-
-      for (const str of el.input.split('')) {
-        await ele.setValue(ele.element.value + str)
+    test(item.title + ' ' + el.input + ' -> ' + el.expect, () => {
+      if (el.checkBindValue) {
+        expect(() => validate(el.bindValue)).toThrow()
+      } else {
+        testCb(item, el)
       }
-
-      if (el.blur || (el.blur === undefined && item.blur)) {
-        await ele.trigger('blur')
-      }
-
-      expect(ele.element.value).toBe(el.expect)
     })
   })
 })
