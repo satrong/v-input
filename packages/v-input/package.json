@@ -1,6 +1,6 @@
 {
   "name": "@satrong/v-input",
-  "version": "0.0.2",
+  "version": "0.0.3-alpha.0",
   "description": "A Vue directive to control HTML input/textarea element value. Support Vue 2 and Vue 3.",
   "keywords": [
     "vue2",
