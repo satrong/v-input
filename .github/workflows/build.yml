@@ -52,4 +52,4 @@ jobs:
 
       - name: Git commit
         if: env.GIT_CHANGES != ''
-        run: git add . && git commit -am "chore(build):\ auto build by CI" && git push
+        run: git add . && git commit -am "chore(build):${{ ' ' }}auto build by CI" && git push
