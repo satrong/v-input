@@ -12,7 +12,11 @@ const app = createApp({
 
 app.component('MyInput', {
   data() {
-    return { myValue: 'test' }
+    return {
+      form: {
+        name: ''
+      }
+    }
   },
   methods: {
     fn(val: string) {
@@ -21,8 +25,8 @@ app.component('MyInput', {
   },
   template: `
 <div>
-  <input type="text" v-model="myValue" v-input:myValue.number />
-  <span v-text="myValue"></span>
+  <input type="text" v-model="form.name" v-input:form:name.number />
+  <span v-text="form.name"></span>
 </div>
 `
 })
