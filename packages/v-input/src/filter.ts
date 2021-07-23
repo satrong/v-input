@@ -103,7 +103,9 @@ function filter(value: string, bindValue: BindValue, modifier: Modifier, trigger
   if (Array.isArray(bindValue)) {
     const [min, max] = bindValue
     const v = Number(val)
-    if (v < min || v > max) val = ''
+    if ((max !== Infinity && min !== -Infinity) || trigger === 'blur') {
+      if (v < min || v > max) val = ''
+    }
   }
 
   // 失去焦点时处理 0001 和 1.000 的情况
