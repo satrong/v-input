@@ -12,13 +12,6 @@ export const directive: Directive = {
 
 export default {
   install: (vue: App | VueConstructor) => {
-    if (typeof vue.version !== 'string') {
-      throw new Error(`传入参数错误：
-Vue 3 请传入 \`createApp()\`，
-Vue 2 请传入 \`Vue\` 函数`
-      )
-    }
-
     if (vue.version.startsWith('2.')) {
       (vue as VueConstructor).directive('input', {
         bind(el: any, binding: any, vnode) {

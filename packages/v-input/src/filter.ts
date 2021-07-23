@@ -45,16 +45,16 @@ function validate(bindValue: BindValue) {
   if (Array.isArray(bindValue)) {
     const [min, max] = bindValue
     if (bindValue.length !== 2) {
-      throw Error('数组长度必须为2')
+      throw Error('Array length must be 2')
     }
     if (typeof min !== 'number' || typeof max !== 'number') {
-      throw Error('取值范围的最小值和最大值必须是数值')
+      throw Error('Array\'s elements must be `Number`')
     }
     if (min > max) {
-      throw Error('取值范围的最小值不能大于最大值')
+      throw Error('In the array `[min, max]`, min cannot be greater than max')
     }
   } else if (bindValue !== undefined && typeof bindValue !== 'function') {
-    throw Error('绑定值必须是函数')
+    throw Error('The `bindValue` must be `Function`')
   }
 }
 
