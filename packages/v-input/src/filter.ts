@@ -20,6 +20,27 @@ function isInputOrTextarea(obj: HTMLElement) {
   return ['HTMLInputElement', 'HTMLTextAreaElement'].indexOf(t) > -1
 }
 
+function hasProperty(obj: any, props: string) {
+  let o = obj
+  return props.split('.').every(item => {
+    if (Object.prototype.hasOwnProperty.call(o, item)) {
+      o = o[item]
+      return true
+    }
+    return false
+  })
+}
+
+function setPropertyVal(obj: any, props: string, value: any) {
+  /* eslint no-new-func: 0 */
+  const fn = new Function('obj', 'value', `return obj.${props} = value`)
+  fn(obj, value)
+}
+
+function getPropertyVal(obj: any, props: string) {
+  return props.split('.').reduce((prev, item) => prev[item], obj)
+}
+
 function validate(bindValue: BindValue) {
   if (Array.isArray(bindValue)) {
     const [min, max] = bindValue
@@ -98,25 +119,25 @@ function filter(value: string, bindValue: BindValue, modifier: Modifier, trigger
 }
 
 export function bind(ctx: ComponentPublicInstance, el: any, binding: DirectiveBinding) {
-  const expression = binding.arg || ''
+  const arg = (binding.arg || '').replace(/:/g, '.')
   const modifiers = binding.modifiers as Modifier
-  if (!Object.prototype.hasOwnProperty.call(ctx.$data, expression)) return
+  if (!hasProperty(ctx.$data, arg)) throw (new Error(`The expression \`this.${arg}\` not found.`))
   validate(binding.value)
 
-  el.vInputUnwatch = ctx.$watch(expression, (val: unknown, oldValue: any) => {
+  el.vInputUnwatch = ctx.$watch(arg, (val: unknown, oldValue: any) => {
     if (typeof val === 'string') {
       let val1 = filter(val, binding.value, modifiers)
       if (val !== '' && val1 === '' && oldValue !== '') {
         val1 = filter(oldValue, binding.value, modifiers)
       }
-      (ctx.$data as any)[expression] = val1
+      setPropertyVal(ctx.$data, arg, val1)
     }
   })
 
   const elem = isInputOrTextarea(el) ? el : el.querySelector('input,textarea')
   if (elem) {
     const handler = () => {
-      const val = (ctx.$data as any)[expression]
+      const val = getPropertyVal(ctx.$data, arg)
 
       let result = val
       if (modifiers['!0']) {
@@ -126,7 +147,7 @@ export function bind(ctx: ComponentPublicInstance, el: any, binding: DirectiveBi
         }
       }
 
-      (ctx.$data as any)[expression] = filter(result, binding.value, modifiers, 'blur')
+      setPropertyVal(ctx.$data, arg, filter(result, binding.value, modifiers, 'blur'))
     }
     elem.addEventListener('blur', handler)
     el.vInputBlur = [elem, handler]
