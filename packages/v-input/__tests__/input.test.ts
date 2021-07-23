@@ -45,7 +45,7 @@ type TestUnits = {
 
 const testUnits: TestUnits = [
   {
-    title: '任意字符',
+    title: 'Any string',
     arg: 'a',
     items: [
       { input: 'abc1', expect: 'abc1' },
@@ -53,7 +53,7 @@ const testUnits: TestUnits = [
     ]
   },
   {
-    title: '任意数值',
+    title: 'Any number',
     arg: 'a.b',
     modifier: ['number'],
     items: [
@@ -62,7 +62,7 @@ const testUnits: TestUnits = [
     ]
   },
   {
-    title: '非0',
+    title: 'Not zero',
     arg: 'a.b.c',
     modifier: ['!0'],
     blur: true,
@@ -74,7 +74,7 @@ const testUnits: TestUnits = [
     ]
   },
   {
-    title: '范围取值',
+    title: 'Range',
     arg: 'a',
     bindValue: [-15, 30],
     items: [
@@ -92,7 +92,29 @@ const testUnits: TestUnits = [
     ]
   },
   {
-    title: '整数',
+    title: 'range: >= 10',
+    arg: 'a',
+    bindValue: [10, Infinity],
+    items: [
+      { input: '9', expect: '', blur: true },
+      { input: '9', expect: '9' },
+      { input: '10', expect: '10' },
+      { input: '10', expect: '10', blur: true }
+    ]
+  },
+  {
+    title: 'range: <= 10',
+    arg: 'a',
+    bindValue: [-Infinity, 10],
+    items: [
+      { input: '9', expect: '9', blur: true },
+      { input: '9', expect: '9' },
+      { input: '12', expect: '12' },
+      { input: '12', expect: '', blur: true }
+    ]
+  },
+  {
+    title: 'Int',
     arg: 'a',
     modifier: ['integer'],
     items: [
@@ -103,7 +125,7 @@ const testUnits: TestUnits = [
     ]
   },
   {
-    title: '正数',
+    title: 'Positive',
     arg: 'a',
     modifier: ['positive'],
     items: [
@@ -115,7 +137,7 @@ const testUnits: TestUnits = [
     ]
   },
   {
-    title: '负数',
+    title: 'Negative',
     arg: 'a',
     modifier: ['negative'],
     items: [
@@ -126,7 +148,7 @@ const testUnits: TestUnits = [
     ]
   },
   {
-    title: '正整数',
+    title: 'Positive integer',
     arg: 'a',
     modifier: ['positive', 'integer'],
     items: [
@@ -138,7 +160,7 @@ const testUnits: TestUnits = [
     ]
   },
   {
-    title: '负整数',
+    title: 'Negative integer',
     arg: 'a',
     modifier: ['negative', 'integer'],
     items: [
@@ -151,7 +173,7 @@ const testUnits: TestUnits = [
     ]
   },
   {
-    title: '函数',
+    title: 'Function',
     arg: 'a',
     items: [
       { input: 'a1b2c3', expect: 'abc', bindValue: val => val.replace(/[^a-z]/gi, '') },
