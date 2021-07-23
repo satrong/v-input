@@ -53,8 +53,15 @@ function validate(bindValue: BindValue) {
     if (min > max) {
       throw Error('In the array `[min, max]`, min cannot be greater than max')
     }
-  } else if (bindValue !== undefined && typeof bindValue !== 'function') {
-    throw Error('The `bindValue` must be `Function`')
+  } else if (bindValue !== undefined) {
+    if (typeof bindValue !== 'function') {
+      throw Error('The `bindValue` must be `Function`')
+    } else {
+      const val = bindValue('12.33bc@1.22.cc')
+      if (val !== bindValue(val)) {
+        throw Error('Make sure `bindValue` function DONOT return dynamic value.')
+      }
+    }
   }
 }
 
