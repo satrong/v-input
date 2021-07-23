@@ -41,7 +41,7 @@ function getPropertyVal(obj: any, props: string) {
   return props.split('.').reduce((prev, item) => prev[item], obj)
 }
 
-function validate(bindValue: BindValue) {
+export function validate(bindValue: BindValue) {
   if (Array.isArray(bindValue)) {
     const [min, max] = bindValue
     if (bindValue.length !== 2) {
@@ -57,8 +57,12 @@ function validate(bindValue: BindValue) {
     if (typeof bindValue !== 'function') {
       throw Error('The `bindValue` must be `Function`')
     } else {
-      const val = bindValue('12.33bc@1.22.cc')
-      if (val !== bindValue(val)) {
+      // try to check. May misjudge
+      const checkList = ['', '123', '12ab', '1.2.3.4']
+      if (checkList.some(el => {
+        const val = bindValue(el)
+        return val !== bindValue(val)
+      })) {
         throw Error('Make sure `bindValue` function DONOT return dynamic value.')
       }
     }
