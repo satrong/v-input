@@ -4,21 +4,25 @@ import type { BindValue, Modifier } from '../src/filter'
 
 type TModifier = keyof Modifier | ''
 
-function inputComponent(modifier: string, bindValue?: BindValue) {
+function inputComponent(arg: string, modifier: string, bindValue?: BindValue) {
+  const data = arg.split('.').reduceRight((prev, item) => {
+    return { [item]: prev }
+  }, '' as any)
+
   return {
     directives: {
       input: directive
     },
     data() {
       return {
-        myValue: '',
+        ...data,
         bindValue
       }
     },
     template: `
 <div>
-  <input type="text" v-model="myValue" v-input:myValue${modifier}="bindValue" />
-  <span v-text="myValue"></span>
+  <input type="text" v-model="${arg}" v-input:${arg.replace(/\./g, ':')}${modifier}="bindValue" />
+  <span v-text="${arg}"></span>
 </div>
 `
   }
@@ -26,6 +30,7 @@ function inputComponent(modifier: string, bindValue?: BindValue) {
 
 type TestUnits = {
   title: string;
+  arg: string;
   modifier?: TModifier[];
   bindValue?: BindValue;
   blur?: boolean;
@@ -41,6 +46,7 @@ type TestUnits = {
 const testUnits: TestUnits = [
   {
     title: '任意字符',
+    arg: 'a',
     items: [
       { input: 'abc1', expect: 'abc1' },
       { input: '-abc1', expect: '-abc1', blur: true }
@@ -48,6 +54,7 @@ const testUnits: TestUnits = [
   },
   {
     title: '任意数值',
+    arg: 'a.b',
     modifier: ['number'],
     items: [
       { input: 'a1b2c3', expect: '123' },
@@ -56,6 +63,7 @@ const testUnits: TestUnits = [
   },
   {
     title: '非0',
+    arg: 'a.b.c',
     modifier: ['!0'],
     blur: true,
     items: [
@@ -67,6 +75,7 @@ const testUnits: TestUnits = [
   },
   {
     title: '范围取值',
+    arg: 'a',
     bindValue: [-15, 30],
     items: [
       { input: '1', expect: '1' },
@@ -84,6 +93,7 @@ const testUnits: TestUnits = [
   },
   {
     title: '整数',
+    arg: 'a',
     modifier: ['integer'],
     items: [
       { input: '1.2', expect: '12' },
@@ -94,6 +104,7 @@ const testUnits: TestUnits = [
   },
   {
     title: '正数',
+    arg: 'a',
     modifier: ['positive'],
     items: [
       { input: 'a12', expect: '12' },
@@ -105,6 +116,7 @@ const testUnits: TestUnits = [
   },
   {
     title: '负数',
+    arg: 'a',
     modifier: ['negative'],
     items: [
       { input: '12', expect: '12' },
@@ -115,6 +127,7 @@ const testUnits: TestUnits = [
   },
   {
     title: '正整数',
+    arg: 'a',
     modifier: ['positive', 'integer'],
     items: [
       { input: '12', expect: '12' },
@@ -126,6 +139,7 @@ const testUnits: TestUnits = [
   },
   {
     title: '负整数',
+    arg: 'a',
     modifier: ['negative', 'integer'],
     items: [
       { input: '12', expect: '12' },
@@ -138,6 +152,7 @@ const testUnits: TestUnits = [
   },
   {
     title: '函数',
+    arg: 'a',
     items: [
       { input: 'a1b2c3', expect: 'abc', bindValue: val => val.replace(/[^a-z]/gi, '') },
       { input: 'a1b2c3000', expect: '123', modifier: ['number'], bindValue: val => val.replace(/0+/g, '') }
@@ -150,7 +165,7 @@ testUnits.forEach(item => {
     test(item.title + ' ' + el.input + ' -> ' + el.expect, async() => {
       const modifiers = (el.modifier ? el.modifier : item.modifier) || []
       const modifier = modifiers.length > 0 ? [''].concat(modifiers) : []
-      const wrapper = mount(inputComponent(modifier.join('.'), el.bindValue || item.bindValue))
+      const wrapper = mount(inputComponent(item.arg, modifier.join('.'), el.bindValue || item.bindValue))
       const ele = wrapper.find('input')
 
       for (const str of el.input.split('')) {
