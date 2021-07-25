@@ -17,7 +17,7 @@ Vue.use(vInput)
 
 new Vue({
   // ...
-})
+}).$mount('#app')
 ```
 
 For Vue 3.x:
@@ -61,9 +61,9 @@ export default {
 
 
 ## arg
-Corresponding to the value of `v-model`, replace `.` with `:` when the value include `.`. 
+Corresponding to the value of `v-model` , replace `.` with `:` when the value include `.` . 
 
-For example, the value is `a.b.c`, and the `arg` should be `a:b:c`.
+For example, the value is `a.b.c` , and the `arg` should be `a:b:c` .
 
 
 ## modifier
