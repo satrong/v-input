@@ -53,5 +53,8 @@ jobs:
         if: env.GIT_CHANGES != ''
         run: git add . && git commit -am "build" && git push
 
+      - name: Copy README.md
+        run: cp README.md packages/v-input
+
       - name: Publish NPM
         run: lerna publish ${{ github.event.inputs.bump }} --yes --message "chore(release):${{ ' ' }}publish %v"

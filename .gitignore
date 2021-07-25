@@ -121,3 +121,7 @@ out
 package-lock.json
 .pnpm-debug.log
 .npmrc
+
+.DS_Store
+
+packages/v-input/README.md
