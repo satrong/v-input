@@ -1,5 +1,5 @@
 {
-  "npmClient": "pnpm",
+  "npmClient": "yarn",
   "packages": [
     "packages/*"
   ],
