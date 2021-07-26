@@ -33,7 +33,7 @@ createApp({
 ## Usage
 The format is as follow:
 ```html
-v-input:arg.modifier="bindValue"
+<input v-model="arg" v-input:arg.modifier="bindValue" />
 ```
 
 Example:
