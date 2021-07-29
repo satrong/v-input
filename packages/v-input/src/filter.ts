@@ -94,6 +94,7 @@ function filter(value: string, bindValue: BindValue, modifier: Modifier, trigger
   }
 
   if (useModifier) {
+    val = val.replace(/\s+/g, '')
     if (val !== '' && val !== '-') {
       if (!isFinite(+val)) {
         const matched = val.match(/-?\d+\.?\d+/)
@@ -111,10 +112,10 @@ function filter(value: string, bindValue: BindValue, modifier: Modifier, trigger
     val = ''
   }
 
-  if (Array.isArray(bindValue)) {
+  if (Array.isArray(bindValue) && val !== '') {
     const [min, max] = bindValue
     const v = Number(val)
-    if ((max !== Infinity && min !== -Infinity) || trigger === 'blur') {
+    if (trigger === 'blur') {
       if (v < min || v > max) val = ''
     }
   }
