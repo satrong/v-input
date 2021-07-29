@@ -23,7 +23,7 @@ function isInputOrTextarea(obj: HTMLElement) {
 function hasProperty(obj: any, props: string) {
   let o = obj
   return props.split('.').every(item => {
-    if (Object.prototype.hasOwnProperty.call(o, item)) {
+    if (Object.prototype.hasOwnProperty.call(o, item) || (window.Reflect && Reflect.has(o, item))) {
       o = o[item]
       return true
     }
