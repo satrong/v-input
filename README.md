@@ -75,5 +75,5 @@ For example, the value is `a.b.c` , and the `arg` should be `a:b:c` .
 
 
 ## bindValue
-- `[min, max]` Limit the value range
+- `[min, max]` Limit the value range. Trigger by blur event.
 - `(val) => string` Custom function. **⚠ DONOT RETURN DYNAMIC VALUE**
