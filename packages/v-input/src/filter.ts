@@ -135,7 +135,7 @@ function filter(value: string, bindValue: BindValue, modifier: Modifier, trigger
 export function bind(ctx: ComponentPublicInstance, el: any, binding: DirectiveBinding) {
   const arg = (binding.arg || '').replace(/:/g, '.')
   const modifiers = binding.modifiers as Modifier
-  if (!hasProperty(ctx.$data, arg)) throw (new Error(`The expression \`this.${arg}\` not found.`))
+  if (!hasProperty(ctx, arg)) throw (new Error(`The expression \`this.${arg}\` not found.`))
   validate(binding.value)
 
   el.vInputUnwatch = ctx.$watch(arg, (val: unknown, oldValue: any) => {
@@ -144,14 +144,14 @@ export function bind(ctx: ComponentPublicInstance, el: any, binding: DirectiveBi
       if (val !== '' && val1 === '' && oldValue !== '') {
         val1 = filter(oldValue, binding.value, modifiers)
       }
-      setPropertyVal(ctx.$data, arg, val1)
+      setPropertyVal(ctx, arg, val1)
     }
   })
 
   const elem = isInputOrTextarea(el) ? el : el.querySelector('input,textarea')
   if (elem) {
     const handler = () => {
-      const val = getPropertyVal(ctx.$data, arg)
+      const val = getPropertyVal(ctx, arg)
 
       let result = val
       if (modifiers['!0']) {
@@ -161,7 +161,7 @@ export function bind(ctx: ComponentPublicInstance, el: any, binding: DirectiveBi
         }
       }
 
-      setPropertyVal(ctx.$data, arg, filter(result, binding.value, modifiers, 'blur'))
+      setPropertyVal(ctx, arg, filter(result, binding.value, modifiers, 'blur'))
     }
     elem.addEventListener('blur', handler)
     el.vInputBlur = [elem, handler]
