@@ -2,20 +2,20 @@
   <img src="https://img.shields.io/npm/v/@satrong/v-input.svg" />
 </a>
 <p>
-  English | <a href="README.zh-CN.md">中文</a>
+  中文 | <a href="README.md">English</a>
 </p>
 
-A Vue directive to control HTML input/textarea element value. Support Vue 2 and Vue 3.
+用于控制 input/textarea 元素 value 值的指令。支持 Vue 2 和 Vue 3 。
 
-> [Online Demo](https://satrong.github.io/v-input/packages/demo/dist/)
+> [在线demo](https://satrong.github.io/v-input/packages/demo/dist/)
 
 
-## Installation
+## 安装
 ```shell
 npm install @satrong/v-input
 ```
 
-For Vue 2.x:
+Vue 2.x:
 ```js
 import Vue from 'vue'
 import vInput from '@satrong/v-input'
@@ -27,7 +27,7 @@ new Vue({
 }).$mount('#app')
 ```
 
-For Vue 3.x:
+Vue 3.x:
 ```js
 import { createApp } from 'vue'
 import vInput from '@satrong/v-input'
@@ -37,8 +37,8 @@ createApp({
 }).use(vInput).mount('#app')
 ```
 
-## Usage
-The format is as follow:
+## 使用
+格式如下：
 ```html
 <input v-model="arg" v-input:arg.modifier="bindValue" />
 ```
@@ -68,19 +68,22 @@ export default {
 
 
 ## arg
-Corresponding to the value of `v-model` , replace `.` with `:` when the value include `.` . 
+> 指令的参数
+对应 `v-model` 的值，如果值中包含 `.` 则需要将 `.` 替换为 `:` 。
 
-For example, the value is `a.b.c` (ie. `v-model="a.b.c"` ), and the `arg` should be `a:b:c` (ie. `v-input:a:b:c`).
+例如，`v-model` 绑定的值为 `a.b.c` （即 `v-model="a.b.c"` ），那么传给指令的参数应该为 `a:b:c` （即 `v-input:a:b:c` ）。
 
 
 ## modifier
-- `number` Any number string
-- `integer`
-- `positive`
-- `negative`
-- `!0` Not zero
+> 指令的修饰符
+- `number` 任意数值
+- `integer` 整数
+- `positive` 正数
+- `negative` 负数
+- `!0` 非0
 
 
 ## bindValue
-- `[min, max]` Limit the value range. Trigger by blur event.
-- `(val) => string` Custom function. **⚠ DONOT RETURN DYNAMIC VALUE**
+> 指令绑定的值
+- `[min, max]` 限制输入值的范围。失去焦点时触发。
+- `(val) => string` 自定义函数。 **⚠ 注意：不要返回动态值** （意思是要确保 `fn(val) === fn(fn(val))` 成立）
