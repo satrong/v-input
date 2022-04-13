@@ -85,9 +85,12 @@ const testUnits: TestUnits[] = [
       { input: '1', expect: '1' },
       { input: 'a12', expect: '12' },
       { input: 'a-15', expect: '-15' },
-      { input: 'a-19', expect: '-1' },
-      { input: '2a-19', expect: '21' },
-      { input: '3a40', expect: '30' },
+      { input: 'a-19', expect: '-19' },
+      { input: 'a-19', expect: '', blur: true },
+      { input: '2a-19', expect: '219' },
+      { input: '2a-19', expect: '', blur: true },
+      { input: '3a40', expect: '340' },
+      { input: '3a40', expect: '', blur: true },
       { input: 'a0', expect: '0' },
       { input: 'a0', expect: '', modifier: ['!0'], blur: true },
       { input: '+02.20', expect: '2.2', blur: true },
@@ -208,16 +211,16 @@ async function testCb(item: TestUnits, el: TestUnitsItem) {
     await ele.trigger('blur')
   }
 
-  expect(ele.element.value).toBe(el.expect)
+  return ele.element.value
 }
 
 testUnits.forEach(item => {
   item.items.forEach(el => {
-    test(item.title + ' ' + el.input + ' -> ' + el.expect, () => {
+    test(item.title + ' ' + el.input + ' -> ' + el.expect, async() => {
       if (el.checkBindValue) {
         expect(() => validate(el.bindValue)).toThrow()
       } else {
-        testCb(item, el)
+        expect(await testCb(item, el)).toBe(el.expect)
       }
     })
   })

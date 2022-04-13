@@ -1,1 +1,3 @@
-declare module '@satrong/v-input';
+declare function vInput(): void;
+
+export default vInput

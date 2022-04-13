@@ -12,6 +12,9 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: 14
+      - uses: pnpm/action-setup@v2
+        with:
+          version: latest
 
       - name: Configure CI Git User
         run: |
@@ -28,10 +31,9 @@ jobs:
             **/node_modules
           key: ${{ runner.os }}-${{ hashFiles('./yarn.lock') }}
 
-      - run: yarn install
-      - run: yarn bootstrap
-      - run: yarn test
-      - run: yarn build
+      - run: pnpm install
+      - run: pnpm test
+      - run: pnpm build
 
       - name: Check changes
         run: echo "GIT_CHANGES=$(echo `git diff --name-only`)" >> $GITHUB_ENV
