@@ -17,12 +17,12 @@
     "build": "tsc && vite build",
     "test": "jest"
   },
-  "main": "./lib/v-input.umd.js",
-  "module": "./lib/v-input.es.js",
+  "main": "./lib/vue-model-input.umd.js",
+  "module": "./lib/vue-model-input.es.js",
   "exports": {
     ".": {
-      "import": "./lib/v-input.es.js",
-      "require": "./lib/v-input.umd.js"
+      "import": "./lib/vue-model-input.es.js",
+      "require": "./lib/vue-model-input.umd.js"
     }
   },
   "types": "./index.d.ts",
