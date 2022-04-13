@@ -7,7 +7,7 @@ on:
       bump:
         required: true
         description: "选择版本类型：latest, beta, next"
-        default: "patch"
+        default: "latest"
 
 jobs:
   BUILD:
@@ -47,13 +47,6 @@ jobs:
       - run: pnpm install
       - run: pnpm test
       - run: pnpm build
-
-      - name: Check changes
-        run: echo "GIT_CHANGES=$(echo `git diff --name-only`)" >> $GITHUB_ENV
-
-      - name: Git commit
-        if: env.GIT_CHANGES != ''
-        run: git add . && git commit -am "build" && git push
 
       - name: Copy README.md
         run: cp README.md packages/v-input
