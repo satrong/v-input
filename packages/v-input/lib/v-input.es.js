@@ -1,1 +1,159 @@
-function e(e,t,r){new Function("obj","value",`return obj.${t} = value`)(e,r)}function t(e,t,r,n="input"){if(""===e)return e;let i=String(e);const o=r["!0"]||r.integer||r.negative||r.number||r.positive||Array.isArray(t);if(r.number&&!/^[-.\d]+$/.test(i)&&(i=i.replace(/[^-.\d]+/g,"")),r.integer&&!/^[-\d]+$/.test(i)&&(i=i.replace(/[^-\d]+/g,"")),r.positive&&!r.negative&&(i=i.replace(/[^.\d]+/g,"")),r.negative&&!r.positive&&(i=i.replace(/[^-.\d]+/g,"")),o&&(i=i.replace(/\s+/g,""),""!==i&&"-"!==i&&!isFinite(+i))){const e=i.match(/-?\d+\.?\d+/);i=e?e[0]:""}if("blur"!==n||!r.negative||r.positive||/^-/.test(i)||0===Number(i)||(i=""),Array.isArray(t)&&""!==i){const[e,r]=t,o=Number(i);"blur"===n&&(o<e||o>r)&&(i="")}return"blur"===n&&o&&""!==i&&(i=String(Number(i))),"function"==typeof t&&(i=t(i)),i}function r(r,n,i){const o=(i.arg||"").replace(/:/g,"."),u=i.modifiers;if(!function(e,t){let r=e;return t.split(".").every((e=>!!(Object.prototype.hasOwnProperty.call(r,e)||window.Reflect&&Reflect.has(r,e))&&(r=r[e],!0)))}(r,o))throw new Error(`The expression \`this.${o}\` not found.`);!function(e){if(Array.isArray(e)){const[t,r]=e;if(2!==e.length)throw Error("Array length must be 2");if("number"!=typeof t||"number"!=typeof r)throw Error("Array's elements must be `Number`");if(t>r)throw Error("In the array `[min, max]`, min cannot be greater than max")}else if(void 0!==e){if("function"!=typeof e)throw Error("The `bindValue` must be `Function`");if(["","123","12ab","1.2.3.4"].some((t=>{const r=e(t);return r!==e(r)})))throw Error("Make sure `bindValue` function DONOT return dynamic value.")}}(i.value),n.vInputUnwatch=r.$watch(o,((n,a)=>{if("string"==typeof n){let s=t(n,i.value,u);""!==n&&""===s&&""!==a&&(s=t(a,i.value,u)),e(r,o,s)}}));const a=function(e){const t=Object.prototype.toString.call(e).slice(8,-1);return["HTMLInputElement","HTMLTextAreaElement"].indexOf(t)>-1}(n)?n:n.querySelector("input,textarea");if(a){const s=()=>{const n=(a=r,o.split(".").reduce(((e,t)=>e[t]),a));var a;let s=n;u["!0"]&&(isNaN(n)||(s=String(Number(n)),"0"===s&&(s=""))),e(r,o,t(s,i.value,u,"blur"))};a.addEventListener("blur",s),n.vInputBlur=[a,s]}}function n(e){var t;null==(t=e.vInputUnwatch)||t.call(e),e.vInputBlur&&e.vInputBlur[0].removeEventListener("blur",e.vInputBlur[1])}const i={mounted(e,t){const n=t.instance;n&&r(n,e,t)},beforeUnmount:n};var o={install:e=>{e.version.startsWith("2.")?e.directive("input",{bind(e,t,n){r(n.context,e,t)},unbind:n}):e.version.startsWith("3.")&&e.directive("input",i)}};export default o;export{i as directive};
+function isInputOrTextarea(obj) {
+  const t = Object.prototype.toString.call(obj).slice(8, -1);
+  return ["HTMLInputElement", "HTMLTextAreaElement"].indexOf(t) > -1;
+}
+function hasProperty(obj, props) {
+  let o = obj;
+  return props.split(".").every((item) => {
+    if (Object.prototype.hasOwnProperty.call(o, item) || window.Reflect && Reflect.has(o, item)) {
+      o = o[item];
+      return true;
+    }
+    return false;
+  });
+}
+function setPropertyVal(obj, props, value) {
+  const fn = new Function("obj", "value", `return obj.${props} = value`);
+  fn(obj, value);
+}
+function getPropertyVal(obj, props) {
+  return props.split(".").reduce((prev, item) => prev[item], obj);
+}
+function validate(bindValue) {
+  if (Array.isArray(bindValue)) {
+    const [min, max] = bindValue;
+    if (bindValue.length !== 2) {
+      throw Error("Array length must be 2");
+    }
+    if (typeof min !== "number" || typeof max !== "number") {
+      throw Error("Array's elements must be `Number`");
+    }
+    if (min > max) {
+      throw Error("In the array `[min, max]`, min cannot be greater than max");
+    }
+  } else if (bindValue !== void 0) {
+    if (typeof bindValue !== "function") {
+      throw Error("The `bindValue` must be `Function`");
+    } else {
+      const checkList = ["", "123", "12ab", "1.2.3.4"];
+      if (checkList.some((el) => {
+        const val = bindValue(el);
+        return val !== bindValue(val);
+      })) {
+        throw Error("Make sure `bindValue` function DONOT return dynamic value.");
+      }
+    }
+  }
+}
+function filter(value, bindValue, modifier, trigger = "input") {
+  if (value === "")
+    return value;
+  let val = String(value);
+  const useModifier = modifier["!0"] || modifier.integer || modifier.negative || modifier.number || modifier.positive || Array.isArray(bindValue);
+  if (modifier.number && !/^[-.\d]+$/.test(val)) {
+    val = val.replace(/[^-.\d]+/g, "");
+  }
+  if (modifier.integer && !/^[-\d]+$/.test(val)) {
+    val = val.replace(/[^-\d]+/g, "");
+  }
+  if (modifier.positive && !modifier.negative) {
+    val = val.replace(/[^.\d]+/g, "");
+  }
+  if (modifier.negative && !modifier.positive) {
+    val = val.replace(/[^-.\d]+/g, "");
+  }
+  if (useModifier) {
+    val = val.replace(/\s+/g, "");
+    if (val !== "" && val !== "-") {
+      if (!isFinite(+val)) {
+        const matched = val.match(/-?\d+\.?\d+/);
+        if (matched) {
+          val = matched[0];
+        } else {
+          val = "";
+        }
+      }
+    }
+  }
+  if (trigger === "blur" && modifier.negative && !modifier.positive && !/^-/.test(val) && Number(val) !== 0) {
+    val = "";
+  }
+  if (Array.isArray(bindValue) && val !== "") {
+    const [min, max] = bindValue;
+    const v = Number(val);
+    if (trigger === "blur") {
+      if (v < min || v > max)
+        val = "";
+    }
+  }
+  if (trigger === "blur" && useModifier && val !== "") {
+    val = String(Number(val));
+  }
+  if (typeof bindValue === "function") {
+    val = bindValue(val);
+  }
+  return val;
+}
+function bind(ctx, el, binding) {
+  const arg = (binding.arg || "").replace(/:/g, ".");
+  const modifiers = binding.modifiers;
+  if (!hasProperty(ctx, arg))
+    throw new Error(`The expression \`this.${arg}\` not found.`);
+  validate(binding.value);
+  el.vInputUnwatch = ctx.$watch(arg, (val, oldValue) => {
+    if (typeof val === "string") {
+      let val1 = filter(val, binding.value, modifiers);
+      if (val !== "" && val1 === "" && oldValue !== "") {
+        val1 = filter(oldValue, binding.value, modifiers);
+      }
+      setPropertyVal(ctx, arg, val1);
+    }
+  });
+  const elem = isInputOrTextarea(el) ? el : el.querySelector("input,textarea");
+  if (elem) {
+    const handler = () => {
+      const val = getPropertyVal(ctx, arg);
+      let result = val;
+      if (modifiers["!0"]) {
+        if (!isNaN(val)) {
+          result = String(Number(val));
+          if (result === "0")
+            result = "";
+        }
+      }
+      setPropertyVal(ctx, arg, filter(result, binding.value, modifiers, "blur"));
+    };
+    elem.addEventListener("blur", handler);
+    el.vInputBlur = [elem, handler];
+  }
+}
+function unbind(el) {
+  var _a;
+  (_a = el.vInputUnwatch) == null ? void 0 : _a.call(el);
+  if (el.vInputBlur) {
+    el.vInputBlur[0].removeEventListener("blur", el.vInputBlur[1]);
+  }
+}
+const directive = {
+  mounted(el, binding) {
+    const ctx = binding.instance;
+    if (ctx)
+      bind(ctx, el, binding);
+  },
+  beforeUnmount: unbind
+};
+var index = {
+  install: (vue) => {
+    if (vue.version.startsWith("2.")) {
+      vue.directive("input", {
+        bind(el, binding, vnode) {
+          bind(vnode.context, el, binding);
+        },
+        unbind
+      });
+    } else if (vue.version.startsWith("3.")) {
+      vue.directive("input", directive);
+    }
+  }
+};
+export { index as default, directive };
