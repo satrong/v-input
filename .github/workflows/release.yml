@@ -59,4 +59,4 @@ jobs:
         run: cp README.md packages/v-input
 
       - name: Publish NPM
-        run: cd packages/v-input && npm publish"
+        run: cd packages/v-input && npm publish --tag ${{ github.event.inputs.bump }}
