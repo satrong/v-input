@@ -1,6 +1,6 @@
 import Vue from 'vue2'
 import type { PropType } from 'vue2'
-import input from '@satrong/v-input'
+import input from 'vue-model-input'
 import { getTpl, getModifiers } from './template'
 
 Vue.use(input)

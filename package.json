@@ -3,8 +3,8 @@
   "private": true,
   "scripts": {
     "dev": "pnpm dev --filter 'demo'",
-    "build": "pnpm build --filter demo --filter @satrong/v-input",
-    "test": "pnpm test --filter '@satrong/v-input'",
+    "build": "pnpm build --filter demo --filter vue-model-input",
+    "test": "pnpm test --filter vue-model-input",
     "lint": "eslint packages/**/*.{js,ts}"
   },
   "devDependencies": {

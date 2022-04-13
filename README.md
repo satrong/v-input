@@ -1,5 +1,5 @@
-<a href="https://www.npmjs.com/package/@satrong/v-input">
-  <img src="https://img.shields.io/npm/v/@satrong/v-input.svg" />
+<a href="https://www.npmjs.com/package/vue-model-input">
+  <img src="https://img.shields.io/npm/v/vue-model-input.svg" />
 </a>
 <p>
   English | <a href="README.zh-CN.md">中文</a>
@@ -12,13 +12,13 @@ A Vue directive to control HTML input/textarea element value. Support Vue 2 and 
 
 ## Installation
 ```shell
-npm install @satrong/v-input
+npm install vue-model-input
 ```
 
 For Vue 2.x:
 ```js
 import Vue from 'vue'
-import vInput from '@satrong/v-input'
+import vInput from 'vue-model-input'
 
 Vue.use(vInput)
 
@@ -30,7 +30,7 @@ new Vue({
 For Vue 3.x:
 ```js
 import { createApp } from 'vue'
-import vInput from '@satrong/v-input'
+import vInput from 'vue-model-input'
 
 createApp({
   // ...

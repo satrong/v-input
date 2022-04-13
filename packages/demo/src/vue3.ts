@@ -1,6 +1,6 @@
 import { createApp, version, ref, h, resolveDirective, withDirectives, watch, onBeforeUnmount, defineComponent } from 'vue'
 import type { PropType } from 'vue'
-import input from '@satrong/v-input'
+import input from 'vue-model-input'
 import { getTpl, getModifiers } from './template'
 
 const app = createApp({
