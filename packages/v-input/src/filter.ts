@@ -32,9 +32,14 @@ function hasProperty(obj: any, props: string) {
 }
 
 function setPropertyVal(obj: any, props: string, value: any) {
-  /* eslint no-new-func: 0 */
-  const fn = new Function('obj', 'value', `return obj.${props} = value`)
-  fn(obj, value)
+  const arr = props.split('.')
+  arr.reduce((prev, item, index) => {
+    if (index === arr.length - 1) {
+      prev[item] = value
+      return null
+    }
+    return prev[item]
+  }, obj)
 }
 
 function getPropertyVal(obj: any, props: string) {
