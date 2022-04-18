@@ -13,8 +13,14 @@ function hasProperty(obj, props) {
   });
 }
 function setPropertyVal(obj, props, value) {
-  const fn = new Function("obj", "value", `return obj.${props} = value`);
-  fn(obj, value);
+  const arr = props.split(".");
+  arr.reduce((prev, item, index2) => {
+    if (index2 === arr.length - 1) {
+      prev[item] = value;
+      return null;
+    }
+    return prev[item];
+  }, obj);
 }
 function getPropertyVal(obj, props) {
   return props.split(".").reduce((prev, item) => prev[item], obj);
